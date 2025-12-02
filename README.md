@@ -288,8 +288,8 @@ cd banking-data-pipeline
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies using pyproject.toml
+pip install -e .
 
 # Set up environment
 cp .env.example .env
