@@ -1,14 +1,14 @@
 # DBT Profiles Configuration
 # This file defines connection profiles for different environments
 
-lending_club_pipeline:
+banking_pipeline:
   target: "{{ env_var('DBT_TARGET', 'dev') }}"
   
   outputs:
     # Development profile using DuckDB (local)
     dev:
       type: duckdb
-      path: "{{ env_var('DUCKDB_PATH', '/Users/priyakarthik/MyProjects/MyNextJobInterview/LendingClub/Assignment/lc-pipeline-v1/data/duckdb/lending_club.duckdb') }}"
+      path: "{{ env_var('DUCKDB_PATH', '/Users/priyakarthik/MyProjects/MyNextJobInterview/Banking/Assignment/banking-data-pipeline/data/duckdb/lending_club.duckdb') }}"
       threads: 4
       
     # Production profile using Databricks

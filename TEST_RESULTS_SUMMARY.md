@@ -46,7 +46,7 @@ dbt test --target prod --project-dir dbt_project --profiles-dir dbt_project
 ### Command
 ```bash
 export DAGSTER_HOME=/path/to/dagster_home
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 ### Results
@@ -106,7 +106,7 @@ docker-compose up
 - ✅ Dagster Webserver: Serving on http://0.0.0.0:3000
 - ✅ Dagster Daemon: Running
 - ✅ User Code Server: Running on port 4000
-- ✅ Location: lending_club_pipeline loaded successfully
+- ✅ Location: banking_pipeline loaded successfully
 
 ### Verification
 ```bash

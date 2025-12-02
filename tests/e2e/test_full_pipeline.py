@@ -13,10 +13,10 @@ import pandas as pd
 import pytest
 from dagster import materialize, AssetSelection
 
-from lending_club_pipeline.definitions import defs
-from lending_club_pipeline.assets.ingestion import customers_raw, accounts_raw
-from lending_club_pipeline.assets.dbt_assets import dbt_transformations
-from lending_club_pipeline.assets.outputs import (
+from banking_pipeline.definitions import defs
+from banking_pipeline.assets.ingestion import customers_raw, accounts_raw
+from banking_pipeline.assets.dbt_assets import dbt_transformations
+from banking_pipeline.assets.outputs import (
     account_summary_csv,
     account_summary_parquet,
 )

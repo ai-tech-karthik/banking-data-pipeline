@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Pipeline validation script for LendingClub Pipeline.
+Pipeline validation script for Banking Pipeline.
 Tests full pipeline execution and validates outputs.
 """
 
@@ -352,7 +352,7 @@ def run_sample_queries() -> bool:
 def main():
     """Run all validation checks."""
     print(f"\n{Colors.BOLD}{'='*60}{Colors.RESET}")
-    print(f"{Colors.BOLD}LendingClub Pipeline - Pipeline Validation{Colors.RESET}")
+    print(f"{Colors.BOLD}Banking Pipeline - Pipeline Validation{Colors.RESET}")
     print(f"{Colors.BOLD}{'='*60}{Colors.RESET}")
     
     # Pre-execution checks

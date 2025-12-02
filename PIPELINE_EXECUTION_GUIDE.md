@@ -1,6 +1,6 @@
-# Lending Club Pipeline - Execution Guide (Enhanced Version)
+# Banking Pipeline - Execution Guide (Enhanced Version)
 
-This guide provides step-by-step instructions for running the **enhanced** Lending Club data pipeline with five-layer architecture, SCD2 historical tracking, CDC incremental processing, and comprehensive data quality checks in both local (DuckDB) and production (Databricks) environments.
+This guide provides step-by-step instructions for running the **enhanced** Banking data pipeline with five-layer architecture, SCD2 historical tracking, CDC incremental processing, and comprehensive data quality checks in both local (DuckDB) and production (Databricks) environments.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -46,7 +46,7 @@ Key packages:
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
-cd lc-pipeline-v1
+cd banking-data-pipeline
 ```
 
 ### 2. Create Virtual Environment
@@ -75,11 +75,11 @@ ENVIRONMENT=dev
 
 # Database Configuration
 DATABASE_TYPE=duckdb
-DUCKDB_PATH=/absolute/path/to/lc-pipeline-v1/data/duckdb/lending_club.duckdb
+DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/lending_club.duckdb
 
 # DBT Configuration
 DBT_TARGET=dev
-DBT_PROFILES_DIR=/absolute/path/to/lc-pipeline-v1/dbt_project
+DBT_PROFILES_DIR=/absolute/path/to/banking-data-pipeline/dbt_project
 
 # Output Configuration
 OUTPUT_PATH=data/outputs
@@ -89,7 +89,7 @@ QUALITY_REPORTS_PATH=data/quality_reports
 SNAPSHOT_TARGET_SCHEMA=snapshots
 
 # Dagster Configuration
-DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
+DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 ```
 
 #### For Databricks (Production):
@@ -102,7 +102,7 @@ DATABASE_TYPE=databricks
 
 # DBT Configuration
 DBT_TARGET=prod
-DBT_PROFILES_DIR=/absolute/path/to/lc-pipeline-v1/dbt_project
+DBT_PROFILES_DIR=/absolute/path/to/banking-data-pipeline/dbt_project
 
 # Output Configuration
 OUTPUT_PATH=data/outputs
@@ -119,7 +119,7 @@ DATABRICKS_SCHEMA=default
 DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
 
 # Dagster Configuration
-DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
+DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 ```
 
 **Important Notes:**
@@ -151,7 +151,7 @@ Ensure your `.env` file is configured for DuckDB:
 ```properties
 DATABASE_TYPE=duckdb
 DBT_TARGET=dev
-DUCKDB_PATH=/absolute/path/to/lc-pipeline-v1/data/duckdb/lending_club.duckdb
+DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/lending_club.duckdb
 SNAPSHOT_TARGET_SCHEMA=snapshots
 ```
 
@@ -166,8 +166,8 @@ rm -f data/quality_reports/*
 For the first run, use `--full-refresh` to initialize all layers including snapshots:
 
 ```bash
-export DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+export DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 Or run DBT directly with full refresh:
@@ -266,8 +266,8 @@ python -c "from databricks import sql; import os; from dotenv import load_dotenv
 
 ### Step 4: Run Initial Full Load
 ```bash
-export DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+export DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 Or run DBT directly:
@@ -398,7 +398,7 @@ python tests/smoke_test.py
 View test coverage report:
 
 ```bash
-pytest tests/ --cov=src/lending_club_pipeline --cov-report=html
+pytest tests/ --cov=src/banking_pipeline --cov-report=html
 open htmlcov/index.html
 ```
 
@@ -427,7 +427,7 @@ Update your input CSV files with changes:
 #### Step 2: Run Incremental Pipeline
 ```bash
 # Run without --full-refresh flag
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 Or with DBT directly:
@@ -508,7 +508,7 @@ dbt run --full-refresh
 dbt snapshot  # Snapshots always run incrementally
 
 # Full refresh with Dagster
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 ### Monitoring Incremental Loads
@@ -537,7 +537,7 @@ cat data/quality_reports/quality_report_*.json | jq '.'
 DUCKDB_PATH=../data/duckdb/lending_club.duckdb
 
 # Correct
-DUCKDB_PATH=/Users/username/project/lc-pipeline-v1/data/duckdb/lending_club.duckdb
+DUCKDB_PATH=/Users/username/project/banking-data-pipeline/data/duckdb/lending_club.duckdb
 ```
 
 #### 2. Dagster Home Path Issues
@@ -545,7 +545,7 @@ DUCKDB_PATH=/Users/username/project/lc-pipeline-v1/data/duckdb/lending_club.duck
 
 **Solution:** Use absolute path for `DAGSTER_HOME`:
 ```bash
-export DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
+export DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 ```
 
 #### 3. Snapshot Schema Not Found
@@ -651,7 +651,7 @@ FROM {{ ref('src_customer') }}
 Run pipeline with verbose logging:
 ```bash
 # Dagster verbose mode
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions --log-level DEBUG
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions --log-level DEBUG
 
 # DBT debug mode
 cd dbt_project
@@ -689,7 +689,7 @@ rm -f data/outputs/*
 rm -f data/quality_reports/*
 
 # Run fresh
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 ---
@@ -926,7 +926,7 @@ The documentation includes:
 Launch the Dagster web interface for visual monitoring:
 
 ```bash
-dagster dev -m src.lending_club_pipeline.definitions
+dagster dev -m src.banking_pipeline.definitions
 ```
 
 Access at: http://localhost:3000
@@ -1013,7 +1013,7 @@ Features:
   - `migration-guide.md` - Migration from three-layer to five-layer
 
 - **DBT Documentation:** Run `dbt docs generate && dbt docs serve` in `dbt_project/`
-- **Dagster UI:** Run `dagster dev -m src.lending_club_pipeline.definitions` for web interface
+- **Dagster UI:** Run `dagster dev -m src.banking_pipeline.definitions` for web interface
 - **Test Documentation:** See `tests/e2e/README.md` for comprehensive test suite documentation
 
 ---

@@ -1,12 +1,12 @@
 # DBT Project Configuration
 # This file defines the project structure and model configurations
 
-name: 'lending_club_pipeline'
+name: 'banking_pipeline'
 version: '1.0.0'
 config-version: 2
 
 # Project profile (must match profile name in profiles.yml)
-profile: 'lending_club_pipeline'
+profile: 'banking_pipeline'
 
 # Directories
 model-paths: ["models"]
@@ -25,7 +25,7 @@ clean-targets:
 
 # Model configurations
 models:
-  lending_club_pipeline:
+  banking_pipeline:
     # Source layer: Raw data ingestion without transformation
     # Materialized as tables for raw data persistence
     source:
@@ -74,14 +74,14 @@ models:
 
 # Seeds configuration
 seeds:
-  lending_club_pipeline:
+  banking_pipeline:
     +schema: seeds
 
 # Snapshots configuration
 # Snapshots implement SCD2 (Slowly Changing Dimension Type 2) tracking
 # to maintain historical versions of records with validity timestamps
 snapshots:
-  lending_club_pipeline:
+  banking_pipeline:
     +target_schema: snapshots
     +strategy: timestamp
     +updated_at: loaded_at

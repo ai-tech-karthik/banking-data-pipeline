@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides detailed data flow diagrams and explanations for the LendingClub Data Pipeline. It traces data from raw CSV files through transformations to final outputs.
+This document provides detailed data flow diagrams and explanations for the Banking Data Pipeline. It traces data from raw CSV files through transformations to final outputs.
 
 ## High-Level Data Flow
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide covers local development workflows for the LendingClub Data Pipeline. It includes instructions for adding new assets, modifying transformations, testing, and debugging.
+This guide covers local development workflows for the Banking Data Pipeline. It includes instructions for adding new assets, modifying transformations, testing, and debugging.
 
 ## Development Environment
 
@@ -21,8 +21,8 @@ docker-compose logs -f dagster-user-code
 ### Directory Structure
 
 ```
-lending-club-pipeline/
-├── src/lending_club_pipeline/    # Dagster code
+banking-data-pipeline/
+├── src/banking_pipeline/    # Dagster code
 │   ├── assets/                   # Asset definitions
 │   ├── resources/                # Resources and config
 │   └── io_managers/              # I/O managers
@@ -46,7 +46,7 @@ lending-club-pipeline/
 1. **Create the asset file** (or add to existing file):
 
 ```python
-# src/lending_club_pipeline/assets/my_new_asset.py
+# src/banking_pipeline/assets/my_new_asset.py
 from dagster import asset
 import pandas as pd
 
@@ -165,7 +165,7 @@ docker-compose exec dagster-user-code dbt test --select int_my_new_model --proje
 
 ### Modifying Existing Assets
 
-1. **Edit the asset code** in `src/lending_club_pipeline/assets/`
+1. **Edit the asset code** in `src/banking_pipeline/assets/`
 2. **Save the file** (hot-reload will pick up changes)
 3. **Reload workspace** in Dagster UI
 4. **Test the changes** by materializing the asset
@@ -198,7 +198,7 @@ docker-compose exec dagster-user-code pytest
 docker-compose exec dagster-user-code pytest tests/unit/test_ingestion.py
 
 # Run with coverage
-docker-compose exec dagster-user-code pytest --cov=src/lending_club_pipeline
+docker-compose exec dagster-user-code pytest --cov=src/banking_pipeline
 
 # Run with verbose output
 docker-compose exec dagster-user-code pytest -v
@@ -225,7 +225,7 @@ Create test files in `tests/unit/`:
 # tests/unit/test_my_asset.py
 import pytest
 import pandas as pd
-from lending_club_pipeline.assets.my_new_asset import my_new_asset
+from banking_pipeline.assets.my_new_asset import my_new_asset
 
 def test_my_new_asset():
     """Test that my_new_asset processes data correctly"""
@@ -250,7 +250,7 @@ Create test files in `tests/integration/`:
 ```python
 # tests/integration/test_pipeline.py
 from dagster import materialize
-from lending_club_pipeline.assets import customers_raw, accounts_raw
+from banking_pipeline.assets import customers_raw, accounts_raw
 
 def test_ingestion_assets():
     """Test that ingestion assets execute successfully"""

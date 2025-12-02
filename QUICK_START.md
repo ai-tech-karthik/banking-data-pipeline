@@ -1,4 +1,4 @@
-# Lending Club Pipeline - Quick Start Guide
+# Banking Pipeline - Quick Start Guide
 
 Quick reference for running the pipeline. For detailed instructions, see `PIPELINE_EXECUTION_GUIDE.md`.
 
@@ -27,14 +27,14 @@ mkdir -p data/duckdb data/outputs data/inputs dagster_home
 # Edit .env file
 DATABASE_TYPE=duckdb
 DBT_TARGET=dev
-DUCKDB_PATH=/absolute/path/to/lc-pipeline-v1/data/duckdb/lending_club.duckdb
-DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
+DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/lending_club.duckdb
+DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 ```
 
 ### 2. Run Pipeline
 ```bash
-export DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+export DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 ### 3. Verify Results
@@ -62,7 +62,7 @@ DATABRICKS_TOKEN=your-token
 DATABRICKS_CATALOG=workspace
 DATABRICKS_SCHEMA=default
 DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
-DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
+DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 ```
 
 ### 2. Test Connection
@@ -72,8 +72,8 @@ python -c "from databricks import sql; import os; from dotenv import load_dotenv
 
 ### 3. Run Pipeline
 ```bash
-export DAGSTER_HOME=/absolute/path/to/lc-pipeline-v1/dagster_home
-dagster asset materialize --select '*' -m src.lending_club_pipeline.definitions
+export DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 ### 4. Verify Results
@@ -93,12 +93,12 @@ python tests/smoke_test.py
 
 ### View Pipeline Assets
 ```bash
-dagster asset list -m src.lending_club_pipeline.definitions
+dagster asset list -m src.banking_pipeline.definitions
 ```
 
 ### Run Specific Asset
 ```bash
-dagster asset materialize --select 'customers_raw' -m src.lending_club_pipeline.definitions
+dagster asset materialize --select 'customers_raw' -m src.banking_pipeline.definitions
 ```
 
 ### Run DBT Only

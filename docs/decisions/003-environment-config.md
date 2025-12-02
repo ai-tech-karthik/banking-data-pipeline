@@ -208,7 +208,7 @@ spec:
 ### Configuration Structure
 
 ```python
-# src/lending_club_pipeline/resources/config.py
+# src/banking_pipeline/resources/config.py
 
 from dataclasses import dataclass
 import os
@@ -307,7 +307,7 @@ class DataPlatformConfig:
 ### Usage in Dagster
 
 ```python
-# src/lending_club_pipeline/definitions.py
+# src/banking_pipeline/definitions.py
 
 from dagster import Definitions
 from .resources.config import DataPlatformConfig

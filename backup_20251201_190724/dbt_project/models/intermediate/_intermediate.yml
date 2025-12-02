@@ -1,0 +1,186 @@
+version: 2
+
+models:
+  - name: int_account_with_customer
+    description: >
+      Intermediate model that joins account records with customer information.
+      This model establishes the relationship between accounts and customers,
+      enabling customer-context analysis and downstream interest rate calculations.
+      
+      Uses INNER JOIN to ensure only accounts with valid customer records are
+      included in downstream processing. Materialized as incremental table with
+      merge strategy to process only new or changed records from the snapshot layer.
+      
+      Incremental Strategy:
+      - Processes only current records from snapshots (dbt_valid_to IS NULL)
+      - Filters to records with dbt_valid_from > max(valid_from_at) on incremental runs
+      - Includes 3-day lookback window to handle late-arriving data
+      - Uses merge strategy with account_id as unique_key
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: account_id
+        description: Unique identifier for the account
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - unique
+          - not_null
+      
+      - name: customer_id
+        description: Foreign key linking to the customer who owns this account
+        data_type: integer
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              to: ref('snap_customer')
+              field: customer_id
+      
+      - name: balance_amount
+        description: Current account balance in decimal format with standardized naming
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - positive_value
+      
+      - name: account_type
+        description: Type of account (Savings or Checking)
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['savings', 'checking']
+      
+      - name: customer_name
+        description: Name of the customer who owns this account
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: has_loan_flag
+        description: >
+          Boolean flag indicating whether the customer has an active loan.
+          Used in downstream calculations to determine interest rate bonuses.
+          Standardized naming with _flag suffix.
+        data_type: boolean
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: valid_from_at
+        description: >
+          Timestamp when this account version became active (from dbt_valid_from).
+          Used for incremental processing and historical tracking.
+        data_type: timestamp
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: valid_to_at
+        description: >
+          Timestamp when this account version became inactive (from dbt_valid_to).
+          NULL for current records. Used for historical tracking.
+        data_type: timestamp
+    tests:
+      - dbt_utils.recency:
+          datepart: day
+          field: valid_from_at
+          interval: 7
+          severity: warn
+
+  - name: int_savings_account_only
+    description: >
+      Intermediate model that filters accounts to include only savings accounts.
+      This model focuses the dataset on the specific account type relevant for
+      interest rate calculations and savings account analysis.
+      
+      Filters out checking accounts by applying WHERE account_type = 'Savings'.
+      Materialized as incremental table with merge strategy to process only
+      new or changed records from the upstream int_account_with_customer model.
+      
+      Incremental Strategy:
+      - Processes only records with valid_from_at > max(valid_from_at) on incremental runs
+      - Uses merge strategy with account_id as unique_key
+      - Inherits incremental behavior from upstream model
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: account_id
+        description: Unique identifier for the savings account
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - unique
+          - not_null
+      
+      - name: customer_id
+        description: Foreign key linking to the customer who owns this savings account
+        data_type: integer
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: customer_name
+        description: Name of the customer who owns this savings account
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: balance_amount
+        description: Current savings account balance in decimal format with standardized naming
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - positive_value
+      
+      - name: has_loan_flag
+        description: >
+          Boolean flag indicating whether the customer has an active loan.
+          Used in interest rate calculations to determine bonus rates.
+          Standardized naming with _flag suffix.
+        data_type: boolean
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: valid_from_at
+        description: >
+          Timestamp when this account version became active.
+          Used for incremental processing and historical tracking.
+        data_type: timestamp
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: valid_to_at
+        description: >
+          Timestamp when this account version became inactive.
+          NULL for current records. Used for historical tracking.
+        data_type: timestamp
+    tests:
+      - dbt_utils.recency:
+          datepart: day
+          field: valid_from_at
+          interval: 7
+          severity: warn

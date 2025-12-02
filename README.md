@@ -1,4 +1,4 @@
-# LC Data Pipeline
+# Banking Data Pipeline
 
 A production-grade data pipeline for processing customer and account data with interest calculations, built with Dagster and DBT.
 
@@ -11,7 +11,7 @@ A production-grade data pipeline for processing customer and account data with i
 
 ## 🎯 Overview
 
-This pipeline processes LC customer and account data, applies interest calculations, and outputs results in multiple formats (CSV, Parquet, Databricks tables). It supports both local development (DuckDB) and production deployment (Databricks).
+This pipeline processes banking customer and account data, applies interest calculations, and outputs results in multiple formats (CSV, Parquet, Databricks tables). It supports both local development (DuckDB) and production deployment (Databricks).
 
 ### Core Design Principles
 
@@ -281,8 +281,8 @@ models:
 
 ```bash
 # Clone repository
-git clone https://github.com/ai-tech-karthik/lc-pipeline-v1
-cd lc-pipeline-v1
+git clone https://github.com/ai-tech-karthik/banking-data-pipeline
+cd banking-data-pipeline
 
 # Create virtual environment
 python -m venv venv
@@ -311,7 +311,7 @@ export DAGSTER_HOME=$(pwd)/dagster_home
 source venv/bin/activate && cd dbt_project && dbt compile --profiles-dir .
 
 # Run pipeline
-source venv/bin/activate && dagster asset materialize --select '*' -m src.lc_pipeline.definitions
+source venv/bin/activate && dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 ### Run Production (Databricks)
@@ -323,7 +323,7 @@ export DBT_TARGET=prod
 export DAGSTER_HOME=$(pwd)/dagster_home
 
 # Run pipeline
-dagster asset materialize --select '*' -m src.lc_pipeline.definitions
+dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 ```
 
 ### Run with Docker
@@ -415,9 +415,9 @@ cat data/quality_reports/quality_report_*.json
 ## 📁 Project Structure
 
 ```
-lc-pipeline/
+banking-pipeline/
 ├── src/
-│   └── lc_pipeline/
+│   └── banking_pipeline/
 │       ├── assets/
 │       │   ├── ingestion.py        # CSV ingestion with CDC detection
 │       │   ├── dbt_assets.py       # DBT transformations with snapshots

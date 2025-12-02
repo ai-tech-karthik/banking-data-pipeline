@@ -2,7 +2,7 @@
 
 ## Overview
 
-The LendingClub Data Pipeline uses environment-driven configuration to support multiple deployment environments (dev, staging, prod) without code changes.
+The Banking Data Pipeline uses environment-driven configuration to support multiple deployment environments (dev, staging, prod) without code changes.
 
 ## Environment Variables
 
@@ -73,7 +73,7 @@ DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/abc123
 ### Loading Configuration
 
 ```python
-from lending_club_pipeline.resources import DataPlatformConfig
+from banking_pipeline.resources import DataPlatformConfig
 
 # Load from environment variables
 config = DataPlatformConfig.from_env()
@@ -196,7 +196,7 @@ export DATABRICKS_SCHEMA=lending_club
 export DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/abc123
 ```
 
-### Error: "No module named 'lending_club_pipeline'"
+### Error: "No module named 'banking_pipeline'"
 
 **Cause:** Python can't find the package
 
@@ -281,7 +281,7 @@ kubectl apply -f k8s/deployment.yaml
 
 ```python
 import os
-from lending_club_pipeline.resources import DataPlatformConfig
+from banking_pipeline.resources import DataPlatformConfig
 
 # Test development config
 os.environ["ENVIRONMENT"] = "dev"

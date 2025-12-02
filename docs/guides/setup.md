@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Before setting up the LendingClub Data Pipeline, ensure you have the following installed:
+Before setting up the Banking Data Pipeline, ensure you have the following installed:
 
 ### Required Software
 
@@ -28,7 +28,7 @@ Before setting up the LendingClub Data Pipeline, ensure you have the following i
 
 ```bash
 git clone <repository-url>
-cd lending-club-pipeline
+cd banking-data-pipeline
 ```
 
 ### 2. Configure Environment Variables

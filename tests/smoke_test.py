@@ -1,5 +1,5 @@
 """
-Smoke tests for the Lending Club Pipeline
+Smoke tests for the Banking Pipeline
 
 This script runs comprehensive smoke tests to verify:
 - Complete pipeline execution from ingestion to outputs

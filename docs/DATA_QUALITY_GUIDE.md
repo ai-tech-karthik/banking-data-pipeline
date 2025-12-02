@@ -1,6 +1,6 @@
 # Data Quality Guide
 
-This guide provides comprehensive documentation for the data quality framework implemented in the LC Data Pipeline. It covers all data quality tests, severity levels, custom test creation, quality monitoring, and alerting mechanisms.
+This guide provides comprehensive documentation for the data quality framework implemented in the Banking Data Pipeline. It covers all data quality tests, severity levels, custom test creation, quality monitoring, and alerting mechanisms.
 
 ## Table of Contents
 
@@ -546,7 +546,7 @@ columns:
 **In dbt_project.yml**:
 ```yaml
 tests:
-  lc_pipeline:
+  banking_pipeline:
     +severity: error  # Default for all tests
     staging:
       +severity: error  # Critical layer
@@ -618,7 +618,7 @@ cat data/quality_reports/quality_report_*.json | jq '.by_layer'
 **Dagster UI**:
 ```bash
 # Materialize quality report asset
-dagster asset materialize --select quality_report -m src.lc_pipeline.definitions
+dagster asset materialize --select quality_report -m src.banking_pipeline.definitions
 
 # View in UI at http://localhost:3000
 ```
@@ -650,7 +650,7 @@ if report['failures']:
 Track quality metrics over time:
 
 ```python
-# src/lc_pipeline/resources/data_quality.py
+# src/banking_pipeline/resources/data_quality.py
 class DataQualityMonitor:
     def generate_report(self, test_results):
         """Generate data quality report from DBT test results"""
@@ -905,10 +905,10 @@ grep "FAIL" test_results.txt
 **Step 2: View Compiled SQL**
 ```bash
 # Find compiled test SQL
-cat dbt_project/target/compiled/lc_pipeline/tests/test_name.sql
+cat dbt_project/target/compiled/banking_pipeline/tests/test_name.sql
 
 # Run manually to debug
-duckdb data/duckdb/lc.duckdb < dbt_project/target/compiled/lc_pipeline/tests/test_name.sql
+duckdb data/duckdb/lc.duckdb < dbt_project/target/compiled/banking_pipeline/tests/test_name.sql
 ```
 
 **Step 3: Analyze Results**

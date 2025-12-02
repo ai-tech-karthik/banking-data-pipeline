@@ -1,6 +1,6 @@
 # Databricks Setup Guide
 
-This guide walks you through setting up Databricks integration for the LendingClub Pipeline.
+This guide walks you through setting up Databricks integration for the Banking Pipeline.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 # Asset Lineage and Metadata
 
-This document describes the asset lineage, metadata configuration, and governance policies for the LendingClub data pipeline.
+This document describes the asset lineage, metadata configuration, and governance policies for the Banking data pipeline.
 
 ## Overview
 

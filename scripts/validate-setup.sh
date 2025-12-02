@@ -3,7 +3,7 @@
 
 set -e
 
-echo "🔍 Validating LendingClub Pipeline Setup..."
+echo "🔍 Validating Banking Pipeline Setup..."
 echo ""
 
 # Check Docker

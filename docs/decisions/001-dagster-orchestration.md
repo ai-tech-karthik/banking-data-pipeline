@@ -40,7 +40,7 @@ We need an orchestration framework to manage the data pipeline that:
 
 ## Decision
 
-We will use **Dagster** as the orchestration framework for the LendingClub Data Pipeline.
+We will use **Dagster** as the orchestration framework for the Banking Data Pipeline.
 
 ## Rationale
 

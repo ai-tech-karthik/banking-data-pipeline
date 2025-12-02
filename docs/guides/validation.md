@@ -1,6 +1,6 @@
 # Pipeline Validation Guide
 
-This guide explains how to validate your LendingClub Pipeline setup and execution.
+This guide explains how to validate your Banking Pipeline setup and execution.
 
 ## Overview
 

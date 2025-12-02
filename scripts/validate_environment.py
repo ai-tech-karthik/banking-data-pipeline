@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Environment validation script for LendingClub Pipeline.
+Environment validation script for Banking Pipeline.
 Validates Python version, dependencies, and configuration.
 """
 
@@ -300,7 +300,7 @@ def check_disk_space() -> bool:
 def main():
     """Run all validation checks."""
     print(f"\n{Colors.BOLD}{'='*60}{Colors.RESET}")
-    print(f"{Colors.BOLD}LendingClub Pipeline - Environment Validation{Colors.RESET}")
+    print(f"{Colors.BOLD}Banking Pipeline - Environment Validation{Colors.RESET}")
     print(f"{Colors.BOLD}{'='*60}{Colors.RESET}")
     
     checks = [

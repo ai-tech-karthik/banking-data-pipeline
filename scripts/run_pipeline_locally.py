@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to run the full LendingClub pipeline locally.
+Script to run the full Banking pipeline locally.
 
 This script materializes all assets in the pipeline from ingestion through
 transformations to outputs.
@@ -13,13 +13,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from dagster import materialize, AssetSelection
-from lending_club_pipeline.definitions import defs
+from banking_pipeline.definitions import defs
 
 
 def main():
     """Run the full pipeline locally."""
     print("=" * 60)
-    print("Running LendingClub Data Pipeline Locally")
+    print("Running Banking Data Pipeline Locally")
     print("=" * 60)
     print()
     
@@ -73,9 +73,9 @@ def main():
     
     try:
         # Get all assets from definitions and filter out Databricks output
-        from lending_club_pipeline.assets.ingestion import customers_raw, accounts_raw
-        from lending_club_pipeline.assets.dbt_assets import dbt_transformations
-        from lending_club_pipeline.assets.outputs import account_summary_csv, account_summary_parquet
+        from banking_pipeline.assets.ingestion import customers_raw, accounts_raw
+        from banking_pipeline.assets.dbt_assets import dbt_transformations
+        from banking_pipeline.assets.outputs import account_summary_csv, account_summary_parquet
         
         all_assets = [
             customers_raw,

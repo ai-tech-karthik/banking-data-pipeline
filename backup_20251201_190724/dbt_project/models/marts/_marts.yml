@@ -1,0 +1,195 @@
+version: 2
+
+models:
+  - name: account_summary
+    description: >
+      Final account summary with calculated interest rates and projected balances.
+      This mart provides business-ready data for reporting and analysis of savings
+      accounts with interest projections based on balance tiers and customer loan status.
+      
+      Layer: Marts (Layer 5)
+      Materialization: incremental (merge strategy)
+      Unique Key: account_id
+      
+      Interest Rate Logic:
+      - Base rate by balance: <$10k=1%, $10k-$20k=1.5%, >=$20k=2%
+      - Bonus rate: +0.5% for customers with loans (has_loan_flag=true)
+      - Annual interest is calculated as balance * total_interest_rate
+      - New balance is the sum of original balance and annual interest
+      
+    config:
+      contract:
+        enforced: true
+        
+    columns:
+      - name: account_id
+        description: Unique identifier for the savings account
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - unique
+          
+      - name: customer_id
+        description: Unique identifier for the customer (foreign key to customers)
+        data_type: integer
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              to: ref('int_savings_account_only')
+              field: customer_id
+          
+      - name: original_balance_amount
+        description: Current account balance before interest calculation (in dollars)
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+          
+      - name: interest_rate_pct
+        description: >
+          Total annual interest rate applied to the account (base rate + bonus rate).
+          Expressed as a decimal (e.g., 0.015 = 1.5%).
+          Valid range: 0.01 (1%) to 0.025 (2.5%)
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          
+      - name: annual_interest_amount
+        description: >
+          Calculated annual interest amount in dollars, rounded to 2 decimal places.
+          Formula: original_balance_amount * interest_rate_pct
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+          
+      - name: new_balance_amount
+        description: >
+          Projected account balance after one year of interest accrual, rounded to 2 decimal places.
+          Formula: original_balance_amount + annual_interest_amount
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> original_balance_amount"
+              
+      - name: calculated_at
+        description: Timestamp when the interest calculation was performed
+        data_type: timestamp
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+    
+    tests:
+      - dbt_utils.recency:
+          datepart: day
+          field: calculated_at
+          interval: 7
+          config:
+            severity: warn
+
+  - name: customer_profile
+    description: >
+      Customer-level aggregated analytics including total accounts, balances,
+      and projected interest across all savings accounts.
+      
+      Layer: Marts (Layer 5)
+      Materialization: incremental (merge strategy)
+      Unique Key: customer_id
+      
+      Business Logic:
+      - Aggregates account_summary data by customer
+      - Calculates total number of savings accounts per customer
+      - Sums total balance across all customer accounts
+      - Sums total annual interest across all customer accounts
+      
+    config:
+      contract:
+        enforced: true
+        
+    columns:
+      - name: customer_id
+        description: Unique identifier for the customer
+        data_type: integer
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - unique
+          
+      - name: customer_name
+        description: Name of the customer
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          
+      - name: has_loan_flag
+        description: Boolean flag indicating if customer has a loan (affects interest rate)
+        data_type: boolean
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          
+      - name: total_accounts_count
+        description: Total number of savings accounts for this customer
+        data_type: bigint
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+          
+      - name: total_balance_amount
+        description: Sum of all account balances for this customer (in dollars)
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+          
+      - name: total_annual_interest_amount
+        description: Sum of all annual interest amounts across customer accounts (in dollars)
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+              
+      - name: calculated_at
+        description: Timestamp when the customer profile was calculated
+        data_type: timestamp
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+    
+    tests:
+      - dbt_utils.recency:
+          datepart: day
+          field: calculated_at
+          interval: 7
+          config:
+            severity: warn

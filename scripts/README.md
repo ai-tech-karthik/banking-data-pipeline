@@ -1,6 +1,6 @@
 # Scripts Directory
 
-This directory contains utility scripts for validating and testing the LendingClub Pipeline.
+This directory contains utility scripts for validating and testing the Banking Pipeline.
 
 ## Available Scripts
 

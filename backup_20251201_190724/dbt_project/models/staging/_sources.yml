@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data ingested from CSV files via Dagster assets
+    meta:
+      dagster:
+        asset_key: ["customers_raw"]
+    
+    tables:
+      - name: customers_raw
+        description: Raw customer data from Customer.csv
+        meta:
+          dagster:
+            asset_key: ["customers_raw"]
+        columns:
+          - name: CustomerID
+            description: Unique identifier for each customer (may contain whitespace)
+          - name: Name
+            description: Customer name (inconsistent casing and whitespace)
+          - name: HasLoan
+            description: Loan status indicator (inconsistent casing)
+      
+      - name: accounts_raw
+        description: Raw account data from accounts.csv
+        meta:
+          dagster:
+            asset_key: ["accounts_raw"]
+        columns:
+          - name: AccountID
+            description: Unique identifier for each account
+          - name: CustomerID
+            description: Foreign key to customer (may contain whitespace)
+          - name: Balance
+            description: Account balance (may be empty or null)
+          - name: AccountType
+            description: Type of account (inconsistent casing)

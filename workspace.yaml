@@ -5,4 +5,4 @@ load_from:
   - grpc_server:
       host: dagster-user-code
       port: 4000
-      location_name: lending_club_pipeline
+      location_name: banking_pipeline

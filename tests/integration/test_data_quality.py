@@ -339,13 +339,13 @@ class TestQualityReportGeneration:
     
     def test_data_quality_monitor_resource_exists(self, dbt_project_path):
         """Test that DataQualityMonitor resource exists."""
-        resource_path = dbt_project_path.parent / "src" / "lending_club_pipeline" / "resources" / "data_quality.py"
+        resource_path = dbt_project_path.parent / "src" / "banking_pipeline" / "resources" / "data_quality.py"
         assert resource_path.exists(), \
             "DataQualityMonitor resource should exist"
     
     def test_data_quality_monitor_has_generate_report_method(self, dbt_project_path):
         """Test that DataQualityMonitor has generate_report method."""
-        resource_path = dbt_project_path.parent / "src" / "lending_club_pipeline" / "resources" / "data_quality.py"
+        resource_path = dbt_project_path.parent / "src" / "banking_pipeline" / "resources" / "data_quality.py"
         content = resource_path.read_text()
         
         assert "def generate_report" in content, \
@@ -359,7 +359,7 @@ class TestQualityReportGeneration:
     
     def test_quality_report_asset_exists(self, dbt_project_path):
         """Test that quality report output asset exists."""
-        outputs_path = dbt_project_path.parent / "src" / "lending_club_pipeline" / "assets" / "outputs.py"
+        outputs_path = dbt_project_path.parent / "src" / "banking_pipeline" / "assets" / "outputs.py"
         content = outputs_path.read_text()
         
         # Should have quality report generation

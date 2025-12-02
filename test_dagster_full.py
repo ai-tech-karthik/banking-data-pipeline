@@ -15,7 +15,7 @@ result = subprocess.run(
     [
         "dagster", "asset", "materialize",
         "--select", "*",
-        "-m", "src.lending_club_pipeline.definitions"
+        "-m", "src.banking_pipeline.definitions"
     ],
     capture_output=True,
     text=True,

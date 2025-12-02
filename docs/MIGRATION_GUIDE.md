@@ -1,6 +1,6 @@
 # Migration Guide: Three-Layer to Five-Layer Architecture
 
-This guide provides step-by-step instructions for migrating the LC Data Pipeline from the original three-layer architecture to the enhanced five-layer architecture with SCD2 historical tracking, incremental processing, and comprehensive data quality checks.
+This guide provides step-by-step instructions for migrating the Banking Data Pipeline from the original three-layer architecture to the enhanced five-layer architecture with SCD2 historical tracking, incremental processing, and comprehensive data quality checks.
 
 ## Table of Contents
 
@@ -61,7 +61,7 @@ CSV Files → Source → Staging → Snapshots → Intermediate → Marts → Ou
    dbt test --target dev --profiles-dir .
    
    # Verify all assets materialize
-   dagster asset materialize --select '*' -m src.lc_pipeline.definitions
+   dagster asset materialize --select '*' -m src.banking_pipeline.definitions
    ```
 
 3. **Update Dependencies**
@@ -111,7 +111,7 @@ The migration is divided into 7 phases that can be executed independently:
 2. **Update Ingestion Assets**
    ```bash
    # Verify ingestion.py loads into source tables
-   # Check: src/lc_pipeline/assets/ingestion.py
+   # Check: src/banking_pipeline/assets/ingestion.py
    ```
 
 3. **Run Source Layer**
@@ -368,7 +368,7 @@ dbt run --select marts --full-refresh --profiles-dir .
 4. **Update Downstream References**
    ```bash
    # Update Dagster output assets
-   # Check: src/lc_pipeline/assets/outputs.py
+   # Check: src/banking_pipeline/assets/outputs.py
    # Verify column names match new conventions
    ```
 
@@ -430,7 +430,7 @@ dbt run --select marts --full-refresh --profiles-dir .
    # Check: data/quality_reports/
    
    # View in Dagster UI
-   dagster asset materialize --select quality_report -m src.lc_pipeline.definitions
+   dagster asset materialize --select quality_report -m src.banking_pipeline.definitions
    ```
 
 6. **Validate**
@@ -565,7 +565,7 @@ dbt run --select account_summary --full-refresh --profiles-dir .
 dbt test --select test_name --profiles-dir .
 
 # View compiled SQL
-cat dbt_project/target/compiled/lc_pipeline/tests/test_name.sql
+cat dbt_project/target/compiled/banking_pipeline/tests/test_name.sql
 ```
 
 #### Issue 5: Performance Degradation
@@ -697,7 +697,7 @@ After completing all phases, validate the migration:
 - [ ] **End-to-End Pipeline**
   ```bash
   # Run complete pipeline
-  dagster asset materialize --select '*' -m src.lc_pipeline.definitions
+  dagster asset materialize --select '*' -m src.banking_pipeline.definitions
   
   # Verify all assets materialized successfully
   ```

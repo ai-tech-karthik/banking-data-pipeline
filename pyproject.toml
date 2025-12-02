@@ -3,14 +3,14 @@ requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lending-club-pipeline"
+name = "banking-data-pipeline"
 version = "0.1.0"
-description = "Production-grade data pipeline for LendingClub customer and account data processing"
+description = "Production-grade data pipeline for Banking customer and account data processing"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "Data Engineering Team"}
+    {name = "Karthik Rajasekaran", email = "technologist.karthik@gmail.com"}
 ]
 keywords = ["dagster", "dbt", "data-pipeline", "etl", "analytics"]
 classifiers = [
@@ -74,7 +74,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v --cov=src/lending_club_pipeline --cov-report=html --cov-report=term"
+addopts = "-v --cov=src/banking_pipeline --cov-report=html --cov-report=term"
 
 [tool.mypy]
 python_version = "3.9"

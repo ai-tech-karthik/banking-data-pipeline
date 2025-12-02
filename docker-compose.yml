@@ -2,7 +2,7 @@ services:
   # PostgreSQL database for Dagster metadata storage
   postgres:
     image: postgres:15-alpine
-    container_name: lending_club_postgres
+    container_name: banking_postgres
     environment:
       POSTGRES_USER: dagster
       POSTGRES_PASSWORD: dagster
@@ -24,8 +24,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: lending_club_webserver
-    image: lending-club-pipeline:latest
+    container_name: banking_webserver
+    image: banking-data-pipeline:latest
     command: >
       dagster-webserver
       -h 0.0.0.0
@@ -71,8 +71,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: lending_club_daemon
-    image: lending-club-pipeline:latest
+    container_name: banking_daemon
+    image: banking-data-pipeline:latest
     command: dagster-daemon run
     environment:
       DAGSTER_POSTGRES_USER: dagster
@@ -112,13 +112,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: lending_club_user_code
-    image: lending-club-pipeline:latest
+    container_name: banking_user_code
+    image: banking-data-pipeline:latest
     command: >
       dagster api grpc
       -h 0.0.0.0
       -p 4000
-      -m src.lending_club_pipeline.definitions
+      -m src.banking_pipeline.definitions
     ports:
       - "4000:4000"
     environment:

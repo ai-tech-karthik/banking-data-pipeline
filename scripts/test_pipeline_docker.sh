@@ -8,7 +8,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 cd "$PROJECT_ROOT"
 
-echo "🧪 LendingClub Pipeline - Docker Compose Test"
+echo "🧪 Banking Pipeline - Docker Compose Test"
 echo "=============================================="
 echo ""
 

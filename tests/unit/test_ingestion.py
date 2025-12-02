@@ -8,7 +8,7 @@ import pandas as pd
 import pytest
 from dagster import AssetExecutionContext, build_asset_context
 
-from lending_club_pipeline.assets.ingestion import (
+from banking_pipeline.assets.ingestion import (
     customers_raw,
     accounts_raw,
     validate_csv_data,
@@ -55,7 +55,7 @@ class TestCustomersRaw:
         df.to_csv(csv_path, index=False)
         
         # Temporarily change the file path in the asset
-        import lending_club_pipeline.assets.ingestion as ingestion_module
+        import banking_pipeline.assets.ingestion as ingestion_module
         original_path = Path("data/inputs/Customer.csv")
         
         # Mock the filepath by creating the directory structure

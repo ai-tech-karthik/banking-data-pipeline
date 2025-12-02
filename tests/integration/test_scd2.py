@@ -13,7 +13,7 @@ import pandas as pd
 import pytest
 import duckdb
 
-from lending_club_pipeline.resources.duckdb_resource import DuckDBResource
+from banking_pipeline.resources.duckdb_resource import DuckDBResource
 
 
 @pytest.fixture

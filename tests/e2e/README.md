@@ -1,6 +1,6 @@
 # End-to-End Testing Suite
 
-This directory contains comprehensive end-to-end tests for the enhanced LendingClub data pipeline with five-layer architecture, SCD2 tracking, and incremental processing.
+This directory contains comprehensive end-to-end tests for the enhanced Banking data pipeline with five-layer architecture, SCD2 tracking, and incremental processing.
 
 ## Test Files
 
@@ -115,7 +115,7 @@ pytest tests/e2e/ -v
 
 ### Run with Coverage
 ```bash
-pytest tests/e2e/ --cov=src/lending_club_pipeline
+pytest tests/e2e/ --cov=src/banking_pipeline
 ```
 
 ## Test Requirements

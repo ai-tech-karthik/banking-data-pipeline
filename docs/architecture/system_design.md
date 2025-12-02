@@ -2,7 +2,7 @@
 
 ## Overview
 
-The LendingClub Data Pipeline is a production-grade data processing system built with modern data engineering best practices. The system demonstrates a complete end-to-end data pipeline that ingests raw CSV files, applies multi-layer transformations, and outputs enriched analytical data in multiple formats.
+The Banking Data Pipeline is a production-grade data processing system built with modern data engineering best practices. The system demonstrates a complete end-to-end data pipeline that ingests raw CSV files, applies multi-layer transformations, and outputs enriched analytical data in multiple formats.
 
 ## Core Design Principles
 

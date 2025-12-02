@@ -21,7 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from dagster import AssetKey
-from lending_club_pipeline.definitions import defs
+from banking_pipeline.definitions import defs
 
 
 def validate_asset_metadata():
