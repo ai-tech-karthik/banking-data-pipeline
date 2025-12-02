@@ -1,0 +1,162 @@
+services:
+  # PostgreSQL database for Dagster metadata storage
+  postgres:
+    image: postgres:15-alpine
+    container_name: lending_club_postgres
+    environment:
+      POSTGRES_USER: dagster
+      POSTGRES_PASSWORD: dagster
+      POSTGRES_DB: dagster
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dagster"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dagster_network
+
+  # Dagster webserver - UI and API
+  dagster-webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lending_club_webserver
+    image: lending-club-pipeline:latest
+    command: >
+      dagster-webserver
+      -h 0.0.0.0
+      -p 3000
+      -w /app/workspace.yaml
+    ports:
+      - "3000:3000"
+    environment:
+      DAGSTER_POSTGRES_USER: dagster
+      DAGSTER_POSTGRES_PASSWORD: dagster
+      DAGSTER_POSTGRES_DB: dagster
+      DAGSTER_POSTGRES_HOST: postgres
+      DAGSTER_POSTGRES_PORT: 5432
+      DATABASE_TYPE: ${DATABASE_TYPE:-duckdb}
+      DBT_TARGET: ${DBT_TARGET:-dev}
+      DUCKDB_PATH: /app/data/duckdb/lending_club.duckdb
+      OUTPUT_PATH: /app/data/outputs
+      DATABRICKS_HOST: ${DATABRICKS_HOST:-}
+      DATABRICKS_TOKEN: ${DATABRICKS_TOKEN:-}
+      DATABRICKS_CATALOG: ${DATABRICKS_CATALOG:-}
+      DATABRICKS_SCHEMA: ${DATABRICKS_SCHEMA:-}
+      DATABRICKS_HTTP_PATH: ${DATABRICKS_HTTP_PATH:-}
+    volumes:
+      - ./src:/app/src
+      - ./dbt_project:/app/dbt_project
+      - ./data:/app/data
+      - ./workspace.yaml:/app/workspace.yaml
+      - ./dagster.yaml:/app/dagster_home/dagster.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/server_info"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - dagster_network
+
+  # Dagster daemon - handles schedules, sensors, and run queue
+  dagster-daemon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lending_club_daemon
+    image: lending-club-pipeline:latest
+    command: dagster-daemon run
+    environment:
+      DAGSTER_POSTGRES_USER: dagster
+      DAGSTER_POSTGRES_PASSWORD: dagster
+      DAGSTER_POSTGRES_DB: dagster
+      DAGSTER_POSTGRES_HOST: postgres
+      DAGSTER_POSTGRES_PORT: 5432
+      DATABASE_TYPE: ${DATABASE_TYPE:-duckdb}
+      DBT_TARGET: ${DBT_TARGET:-dev}
+      DUCKDB_PATH: /app/data/duckdb/lending_club.duckdb
+      OUTPUT_PATH: /app/data/outputs
+      DATABRICKS_HOST: ${DATABRICKS_HOST:-}
+      DATABRICKS_TOKEN: ${DATABRICKS_TOKEN:-}
+      DATABRICKS_CATALOG: ${DATABRICKS_CATALOG:-}
+      DATABRICKS_SCHEMA: ${DATABRICKS_SCHEMA:-}
+      DATABRICKS_HTTP_PATH: ${DATABRICKS_HTTP_PATH:-}
+    volumes:
+      - ./src:/app/src
+      - ./dbt_project:/app/dbt_project
+      - ./data:/app/data
+      - ./workspace.yaml:/app/workspace.yaml
+      - ./dagster.yaml:/app/dagster_home/dagster.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "dagster", "instance", "info"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - dagster_network
+
+  # Dagster user code - contains the actual pipeline code
+  dagster-user-code:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lending_club_user_code
+    image: lending-club-pipeline:latest
+    command: >
+      dagster api grpc
+      -h 0.0.0.0
+      -p 4000
+      -m src.lending_club_pipeline.definitions
+    ports:
+      - "4000:4000"
+    environment:
+      DAGSTER_POSTGRES_USER: dagster
+      DAGSTER_POSTGRES_PASSWORD: dagster
+      DAGSTER_POSTGRES_DB: dagster
+      DAGSTER_POSTGRES_HOST: postgres
+      DAGSTER_POSTGRES_PORT: 5432
+      DATABASE_TYPE: ${DATABASE_TYPE:-duckdb}
+      DBT_TARGET: ${DBT_TARGET:-dev}
+      DUCKDB_PATH: /app/data/duckdb/lending_club.duckdb
+      OUTPUT_PATH: /app/data/outputs
+      DATABRICKS_HOST: ${DATABRICKS_HOST:-}
+      DATABRICKS_TOKEN: ${DATABRICKS_TOKEN:-}
+      DATABRICKS_CATALOG: ${DATABRICKS_CATALOG:-}
+      DATABRICKS_SCHEMA: ${DATABRICKS_SCHEMA:-}
+      DATABRICKS_HTTP_PATH: ${DATABRICKS_HTTP_PATH:-}
+    volumes:
+      - ./src:/app/src
+      - ./dbt_project:/app/dbt_project
+      - ./data:/app/data
+      - ./tests:/app/tests
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import grpc; import sys; channel = grpc.insecure_channel('localhost:4000'); sys.exit(0 if channel else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - dagster_network
+
+networks:
+  dagster_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

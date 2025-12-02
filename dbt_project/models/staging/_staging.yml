@@ -1,0 +1,182 @@
+version: 2
+
+models:
+  - name: stg_customer
+    description: >
+      Cleaned and normalized customer data from the source layer.
+      This staging model performs data cleaning operations including
+      whitespace trimming, type casting, and value normalization.
+      Boolean values are standardized to true/false.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: customer_id
+        description: Unique identifier for each customer (cast to integer)
+        data_type: integer
+        constraints:
+          - type: not_null
+        tests:
+          - unique
+          - not_null
+      
+      - name: customer_name
+        description: Customer name (trimmed and normalized to lowercase)
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: has_loan_flag
+        description: Boolean indicator of whether the customer has an active loan
+        data_type: boolean
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: loaded_at
+        description: Timestamp when the data was loaded into the source layer
+        data_type: timestamp
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+
+  - name: stg_account
+    description: >
+      Cleaned and normalized account data from the source layer.
+      This staging model performs data cleaning operations including whitespace
+      trimming, type casting, value normalization, and filtering out records
+      with null or empty balance values.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: account_id
+        description: Unique identifier for each account (trimmed string)
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - unique
+          - not_null
+      
+      - name: customer_id
+        description: Foreign key to customer (cast to integer)
+        data_type: integer
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      
+      - name: balance_amount
+        description: Account balance amount with standardized precision (decimal 18,2)
+        data_type: decimal(18,2)
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - positive_value
+      
+      - name: account_type
+        description: Type of account (normalized to lowercase)
+        data_type: string
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['savings', 'checking']
+      
+      - name: loaded_at
+        description: Timestamp when the data was loaded into the source layer
+        data_type: timestamp
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+
+  - name: quarantine_stg_customer
+    description: >
+      Quarantine table for customer records that fail validation rules.
+      This model captures records with data quality issues such as null/empty
+      customer_id, null/empty name, or invalid has_loan values. Records in this
+      table should be reviewed and corrected at the source before reprocessing.
+    config:
+      tags: ['quarantine', 'data_quality']
+      contract:
+        enforced: true
+    columns:
+      - name: customer_id
+        description: Customer ID from source (may be invalid)
+        data_type: string
+      
+      - name: name
+        description: Customer name from source (may be invalid)
+        data_type: string
+      
+      - name: has_loan
+        description: Has loan indicator from source (may be invalid)
+        data_type: string
+      
+      - name: loaded_at
+        description: Timestamp when the data was loaded into the source layer
+        data_type: timestamp
+      
+      - name: failure_reason
+        description: Detailed description of why the record failed validation
+        data_type: string
+        tests:
+          - not_null
+      
+      - name: quarantined_at
+        description: Timestamp when the record was quarantined
+        data_type: timestamp
+        tests:
+          - not_null
+
+  - name: quarantine_stg_account
+    description: >
+      Quarantine table for account records that fail validation rules.
+      This model captures records with data quality issues such as null/empty
+      account_id, invalid customer_id, null/negative balance, or null/empty
+      account_type. Records in this table should be reviewed and corrected
+      at the source before reprocessing.
+    config:
+      tags: ['quarantine', 'data_quality']
+      contract:
+        enforced: true
+    columns:
+      - name: account_id
+        description: Account ID from source (may be invalid)
+        data_type: string
+      
+      - name: customer_id
+        description: Customer ID from source (may be invalid)
+        data_type: string
+      
+      - name: balance
+        description: Balance from source (may be invalid)
+        data_type: string
+      
+      - name: account_type
+        description: Account type from source (may be invalid)
+        data_type: string
+      
+      - name: loaded_at
+        description: Timestamp when the data was loaded into the source layer
+        data_type: timestamp
+      
+      - name: failure_reason
+        description: Detailed description of why the record failed validation
+        data_type: string
+        tests:
+          - not_null
+      
+      - name: quarantined_at
+        description: Timestamp when the record was quarantined
+        data_type: timestamp
+        tests:
+          - not_null

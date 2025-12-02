@@ -1,0 +1,47 @@
+# Core Dependencies
+dagster>=1.5.0
+dagster-webserver>=1.5.0
+dagster-postgres>=0.21.0
+dagster-dbt>=0.21.0
+
+# DBT (v1.6+ required for snapshot features and contract enforcement)
+dbt-core>=1.6.0
+dbt-duckdb>=1.6.0
+dbt-databricks>=1.6.0
+# DBT utilities for advanced testing and macros
+dbt-utils>=1.1.0
+
+# Data Processing
+duckdb>=0.9.0
+pandas>=2.0.0
+pyarrow>=13.0.0
+
+# Databricks
+databricks-sql-connector>=2.9.0
+
+# Utilities
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+
+# Data Quality Monitoring
+# JSON schema validation for data contracts
+jsonschema>=4.19.0
+# Great Expectations for advanced data quality checks (optional)
+# great-expectations>=0.18.0
+# Data profiling and quality metrics
+pandas-profiling>=3.6.0
+# SQL parsing and validation
+sqlparse>=0.4.4
+
+# Notification Libraries (Optional)
+# Slack notifications for data quality alerts
+slack-sdk>=3.23.0
+# Email notifications
+# smtplib is built-in, no additional package needed
+
+# Development Dependencies (Optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+ruff>=0.1.0
+mypy>=1.5.0

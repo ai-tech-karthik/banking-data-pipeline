@@ -1,0 +1,26 @@
+CustomerID,Name,HasLoan
+1,Alice Smith-Johnson,Yes
+2,Bob Jones,No
+3,,Yes
+4,Diana Prince-Wayne,No
+,Eve Adams Updated,Yes
+6,Frank Miller,No
+7,Grace Lee,Yes
+8,Henry Wilson,MAYBE
+9,Iris Chen,No
+10,Jack Taylor,Yes
+11,Karen White,No
+12,Leo Martinez,Invalid
+13,Maya Patel,Yes
+14,,Yes
+15,Olivia Davis,Yes
+16,Peter Quinn,Yes
+17,Rachel Stone,No
+18,Samuel Torres,Yes
+19,Tina Valdez,UNKNOWN
+20,Uma Wright,Yes
+21,Victor Zhang,Yes
+22,,No
+INVALID,Wendy Young,Yes
+24,Xavier Brooks,123
+25,Yolanda Cruz,Yes

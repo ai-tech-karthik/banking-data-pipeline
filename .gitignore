@@ -1,0 +1,81 @@
+# Generated data
+data/outputs/*
+data/duckdb/*
+data/quality_reports/*
+!data/**/.gitkeep
+!data/inputs/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+ENV/
+env/
+
+# DBT
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+
+# Environment - Keep .env.example but ignore .env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.kiro/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Dagster
+dagster_home/
+*.db
+*.duckdb
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+*.swp
+
+# OS files
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# Project specific
+lc-pipeline-v1.code-workspace
+test_databricks_asset.py
+TASK_*.md
+TEST_RESULTS.md
+VALIDATION_GUIDE.md
+DOCKER_SETUP.md
