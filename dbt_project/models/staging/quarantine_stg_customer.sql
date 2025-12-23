@@ -60,7 +60,7 @@ validation_failures as (
             else 'Unknown validation failure'
         end as failure_reason,
         
-        current_timestamp() as quarantined_at
+        current_timestamp as quarantined_at
         
     from source
     

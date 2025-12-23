@@ -92,7 +92,7 @@ class DataPlatformConfig:
             environment=os.getenv("ENVIRONMENT", "dev"),
             database_type=os.getenv("DATABASE_TYPE", "duckdb"),
             output_path=os.getenv("OUTPUT_PATH", "data/outputs"),
-            duckdb_path=os.getenv("DUCKDB_PATH", "data/duckdb/lending_club.duckdb"),
+            duckdb_path=os.getenv("DUCKDB_PATH", "data/duckdb/banking.duckdb"),
             databricks_host=os.getenv("DATABRICKS_HOST"),
             databricks_token=os.getenv("DATABRICKS_TOKEN"),
         )
@@ -119,7 +119,7 @@ For local development, we use a `.env` file:
 # .env (not committed to Git)
 ENVIRONMENT=dev
 DATABASE_TYPE=duckdb
-DUCKDB_PATH=data/duckdb/lending_club.duckdb
+DUCKDB_PATH=data/duckdb/banking.duckdb
 OUTPUT_PATH=data/outputs
 ```
 
@@ -129,7 +129,7 @@ With `.env.example` committed to Git:
 # .env.example (committed to Git)
 ENVIRONMENT=dev
 DATABASE_TYPE=duckdb
-DUCKDB_PATH=data/duckdb/lending_club.duckdb
+DUCKDB_PATH=data/duckdb/banking.duckdb
 OUTPUT_PATH=data/outputs
 
 # Production settings (uncomment and configure)
@@ -338,7 +338,7 @@ ENVIRONMENT=dev
 
 # Database Configuration
 DATABASE_TYPE=duckdb
-DUCKDB_PATH=data/duckdb/lending_club.duckdb
+DUCKDB_PATH=data/duckdb/banking.duckdb
 
 # DBT Configuration
 DBT_TARGET=dev

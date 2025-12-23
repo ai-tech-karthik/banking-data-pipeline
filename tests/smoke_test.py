@@ -50,8 +50,8 @@ def test_output_data_quality():
     
     # Check required columns exist
     required_columns = [
-        'customer_id', 'account_id', 'original_balance', 
-        'interest_rate', 'annual_interest', 'new_balance'
+        'customer_id', 'account_id', 'original_balance_amount', 
+        'interest_rate_pct', 'annual_interest_amount', 'new_balance_amount'
     ]
     for col in required_columns:
         assert col in df.columns, f"Missing required column: {col}"
@@ -63,22 +63,22 @@ def test_output_data_quality():
     
     # Verify interest calculations are correct
     for _, row in df.iterrows():
-        expected_interest = row['original_balance'] * row['interest_rate']
-        actual_interest = row['annual_interest']
+        expected_interest = row['original_balance_amount'] * row['interest_rate_pct']
+        actual_interest = row['annual_interest_amount']
         assert abs(expected_interest - actual_interest) < 0.01, \
             f"Interest calculation incorrect for account {row['account_id']}: " \
             f"expected {expected_interest}, got {actual_interest}"
         
-        expected_new_balance = row['original_balance'] + row['annual_interest']
-        actual_new_balance = row['new_balance']
+        expected_new_balance = row['original_balance_amount'] + row['annual_interest_amount']
+        actual_new_balance = row['new_balance_amount']
         assert abs(expected_new_balance - actual_new_balance) < 0.01, \
             f"New balance calculation incorrect for account {row['account_id']}: " \
             f"expected {expected_new_balance}, got {actual_new_balance}"
     
     # Verify data types
     assert df['customer_id'].dtype in ['int64', 'Int64'], "customer_id should be integer"
-    assert df['original_balance'].dtype == 'float64', "original_balance should be float"
-    assert df['interest_rate'].dtype == 'float64', "interest_rate should be float"
+    assert df['original_balance_amount'].dtype == 'float64', "original_balance_amount should be float"
+    assert df['interest_rate_pct'].dtype == 'float64', "interest_rate_pct should be float"
     
     print(f"✓ Data quality checks passed for {len(df)} rows")
     print(f"  - No null values in critical columns")
@@ -145,15 +145,29 @@ def test_csv_parquet_consistency():
     df_csv_sorted = df_csv.sort_values('account_id').reset_index(drop=True)
     df_parquet_sorted = df_parquet.sort_values('account_id').reset_index(drop=True)
     
-    # Convert to same dtypes for comparison
+    # Identify non-timestamp columns for comparison
+    non_timestamp_cols = []
     for col in df_csv_sorted.columns:
+        # Skip timestamp columns as they may have different timezone representations
+        if pd.api.types.is_datetime64_any_dtype(df_csv_sorted[col]) or \
+           pd.api.types.is_datetime64_any_dtype(df_parquet_sorted[col]):
+            continue
+        non_timestamp_cols.append(col)
+    
+    # Convert to same dtypes for comparison
+    for col in non_timestamp_cols:
         if df_csv_sorted[col].dtype != df_parquet_sorted[col].dtype:
             # Convert both to float for numeric columns
             if pd.api.types.is_numeric_dtype(df_csv_sorted[col]):
                 df_csv_sorted[col] = df_csv_sorted[col].astype(float)
                 df_parquet_sorted[col] = df_parquet_sorted[col].astype(float)
     
-    pd.testing.assert_frame_equal(df_csv_sorted, df_parquet_sorted, check_dtype=False)
+    # Compare all columns except timestamp columns
+    pd.testing.assert_frame_equal(
+        df_csv_sorted[non_timestamp_cols], 
+        df_parquet_sorted[non_timestamp_cols], 
+        check_dtype=False
+    )
     
     print(f"✓ CSV and Parquet outputs are consistent ({len(df_csv)} rows)")
 

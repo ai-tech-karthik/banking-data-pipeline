@@ -41,7 +41,7 @@ services:
       DAGSTER_POSTGRES_PORT: 5432
       DATABASE_TYPE: ${DATABASE_TYPE:-duckdb}
       DBT_TARGET: ${DBT_TARGET:-dev}
-      DUCKDB_PATH: /app/data/duckdb/lending_club.duckdb
+      DUCKDB_PATH: /app/data/duckdb/banking.duckdb
       OUTPUT_PATH: /app/data/outputs
       DATABRICKS_HOST: ${DATABRICKS_HOST:-}
       DATABRICKS_TOKEN: ${DATABRICKS_TOKEN:-}
@@ -82,7 +82,7 @@ services:
       DAGSTER_POSTGRES_PORT: 5432
       DATABASE_TYPE: ${DATABASE_TYPE:-duckdb}
       DBT_TARGET: ${DBT_TARGET:-dev}
-      DUCKDB_PATH: /app/data/duckdb/lending_club.duckdb
+      DUCKDB_PATH: /app/data/duckdb/banking.duckdb
       OUTPUT_PATH: /app/data/outputs
       DATABRICKS_HOST: ${DATABRICKS_HOST:-}
       DATABRICKS_TOKEN: ${DATABRICKS_TOKEN:-}
@@ -129,7 +129,7 @@ services:
       DAGSTER_POSTGRES_PORT: 5432
       DATABASE_TYPE: ${DATABASE_TYPE:-duckdb}
       DBT_TARGET: ${DBT_TARGET:-dev}
-      DUCKDB_PATH: /app/data/duckdb/lending_club.duckdb
+      DUCKDB_PATH: /app/data/duckdb/banking.duckdb
       OUTPUT_PATH: /app/data/outputs
       DATABRICKS_HOST: ${DATABRICKS_HOST:-}
       DATABRICKS_TOKEN: ${DATABRICKS_TOKEN:-}

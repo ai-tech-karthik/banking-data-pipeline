@@ -28,7 +28,7 @@ def main():
     workspace_root = Path(__file__).parent.parent
     os.environ.setdefault("DATABASE_TYPE", "duckdb")
     os.environ.setdefault("DBT_TARGET", "dev")
-    os.environ.setdefault("DUCKDB_PATH", str(workspace_root / "data/duckdb/lending_club.duckdb"))
+    os.environ.setdefault("DUCKDB_PATH", str(workspace_root / "data/duckdb/banking.duckdb"))
     os.environ.setdefault("OUTPUT_PATH", str(workspace_root / "data/outputs"))
     
     print("Environment Configuration:")

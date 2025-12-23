@@ -152,7 +152,7 @@ def check_duckdb_database() -> bool:
     """Check if DuckDB database exists and is accessible."""
     print_header("Checking DuckDB Database")
     
-    db_path = Path("data/duckdb/lending_club.duckdb")
+    db_path = Path("data/duckdb/banking.duckdb")
     
     if not db_path.exists():
         print_warning("DuckDB database not found (will be created on first run)")

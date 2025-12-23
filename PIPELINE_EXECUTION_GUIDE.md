@@ -5,6 +5,7 @@ This guide provides step-by-step instructions for running the **enhanced** Banki
 ## Table of Contents
 - [Prerequisites](#prerequisites)
 - [Environment Setup](#environment-setup)
+- [Switching Between Environments](#switching-between-environments)
 - [Running the Pipeline - DuckDB (Local)](#running-the-pipeline---duckdb-local)
 - [Running the Pipeline - Databricks (Production)](#running-the-pipeline---databricks-production)
 - [Running Tests](#running-tests)
@@ -75,7 +76,7 @@ ENVIRONMENT=dev
 
 # Database Configuration
 DATABASE_TYPE=duckdb
-DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/lending_club.duckdb
+DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/banking.duckdb
 
 # DBT Configuration
 DBT_TARGET=dev
@@ -144,6 +145,86 @@ Place your input CSV files in `data/inputs/`:
 
 ---
 
+## Switching Between Environments
+
+The pipeline supports seamless switching between development (DuckDB) and production (Databricks) environments by changing just **3 key variables** in your `.env` file.
+
+### Quick Switch Guide
+
+#### Switch to Development (DuckDB):
+```bash
+# Edit .env file and set:
+ENVIRONMENT=dev
+DATABASE_TYPE=duckdb
+DBT_TARGET=dev
+```
+
+#### Switch to Production (Databricks):
+```bash
+# Edit .env file and set:
+ENVIRONMENT=prod
+DATABASE_TYPE=databricks
+DBT_TARGET=prod
+```
+
+### What Happens When You Switch?
+
+**Development Mode (DuckDB):**
+- ✅ Uses local DuckDB database for fast iteration
+- ✅ No cloud costs
+- ✅ Perfect for testing and development
+- ✅ Outputs to local CSV/Parquet files
+- ✅ Typical run time: 20-30 seconds
+
+**Production Mode (Databricks):**
+- ✅ Uses Databricks SQL Warehouse for scalability
+- ✅ Supports large datasets
+- ✅ Enterprise-grade reliability
+- ✅ Outputs to Databricks Delta tables + local files
+- ✅ Typical run time: 60-90 seconds
+
+### Environment Configuration Matrix
+
+| Setting | Development | Production |
+|---------|-------------|------------|
+| `ENVIRONMENT` | `dev` | `prod` |
+| `DATABASE_TYPE` | `duckdb` | `databricks` |
+| `DBT_TARGET` | `dev` | `prod` |
+| Database | Local DuckDB file | Databricks SQL Warehouse |
+| Credentials | Not required | Databricks token required |
+| Cost | Free | Pay per compute |
+| Speed | Fast (20-30s) | Moderate (60-90s) |
+| Scale | Small-Medium | Large-Enterprise |
+
+### Verification After Switching
+
+After changing environments, verify the configuration:
+
+```bash
+# Check current environment
+python -c "
+from dotenv import load_dotenv
+import os
+load_dotenv()
+print(f'Environment: {os.getenv(\"ENVIRONMENT\")}')
+print(f'Database: {os.getenv(\"DATABASE_TYPE\")}')
+print(f'DBT Target: {os.getenv(\"DBT_TARGET\")}')
+"
+```
+
+### Important Notes
+
+1. **No Code Changes Required**: The same codebase works in both environments
+2. **Data Isolation**: Dev and prod data are completely separate
+3. **Credentials**: Databricks credentials only needed for production mode
+4. **Testing**: Always test in dev before deploying to prod
+5. **Restart Services**: If using Docker, restart containers after switching:
+   ```bash
+   docker-compose restart
+   ```
+
+---
+
 ## Running the Pipeline - DuckDB (Local)
 
 ### Step 1: Configure for DuckDB
@@ -151,13 +232,13 @@ Ensure your `.env` file is configured for DuckDB:
 ```properties
 DATABASE_TYPE=duckdb
 DBT_TARGET=dev
-DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/lending_club.duckdb
+DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/banking.duckdb
 SNAPSHOT_TARGET_SCHEMA=snapshots
 ```
 
 ### Step 2: Clean Previous Runs (Optional)
 ```bash
-rm -f data/duckdb/lending_club.duckdb
+rm -f data/duckdb/banking.duckdb
 rm -f data/outputs/*
 rm -f data/quality_reports/*
 ```
@@ -193,7 +274,7 @@ ls -lh data/quality_reports/
 # Verify all database layers
 python -c "
 import duckdb
-conn = duckdb.connect('data/duckdb/lending_club.duckdb')
+conn = duckdb.connect('data/duckdb/banking.duckdb')
 
 # Show all schemas
 print('Schemas:')
@@ -448,7 +529,7 @@ dbt test
 ```bash
 python -c "
 import duckdb
-conn = duckdb.connect('data/duckdb/lending_club.duckdb')
+conn = duckdb.connect('data/duckdb/banking.duckdb')
 
 # Check snapshot versions for a customer
 print('Customer 1 versions:')
@@ -534,10 +615,10 @@ cat data/quality_reports/quality_report_*.json | jq '.'
 **Solution:** Ensure `DUCKDB_PATH` uses an absolute path:
 ```bash
 # Wrong
-DUCKDB_PATH=../data/duckdb/lending_club.duckdb
+DUCKDB_PATH=../data/duckdb/banking.duckdb
 
 # Correct
-DUCKDB_PATH=/Users/username/project/banking-data-pipeline/data/duckdb/lending_club.duckdb
+DUCKDB_PATH=/Users/username/project/banking-data-pipeline/data/duckdb/banking.duckdb
 ```
 
 #### 2. Dagster Home Path Issues
@@ -554,7 +635,7 @@ export DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 **Solution:** Create the snapshots schema before running:
 ```bash
 # For DuckDB
-python -c "import duckdb; conn = duckdb.connect('data/duckdb/lending_club.duckdb'); conn.execute('CREATE SCHEMA IF NOT EXISTS snapshots'); conn.close()"
+python -c "import duckdb; conn = duckdb.connect('data/duckdb/banking.duckdb'); conn.execute('CREATE SCHEMA IF NOT EXISTS snapshots'); conn.close()"
 
 # For Databricks
 # Create schema in Databricks SQL or via DBT
@@ -684,7 +765,7 @@ dbt test
 #### Complete Pipeline Reset
 ```bash
 # Backup data first!
-rm -f data/duckdb/lending_club.duckdb
+rm -f data/duckdb/banking.duckdb
 rm -f data/outputs/*
 rm -f data/quality_reports/*
 
@@ -866,7 +947,7 @@ Track snapshot growth and version history:
 ```bash
 python -c "
 import duckdb
-conn = duckdb.connect('data/duckdb/lending_club.duckdb')
+conn = duckdb.connect('data/duckdb/banking.duckdb')
 
 # Snapshot storage metrics
 print('Snapshot Storage Metrics:')
@@ -968,25 +1049,30 @@ Features:
 ### Databricks (Production)
 
 **Full Refresh (Initial Load):**
-- **Total Pipeline Duration:** ~90-120 seconds
-- **Ingestion:** ~40 seconds
-- **Staging Layer:** ~10 seconds
-- **Snapshots (Initial):** ~15 seconds
-- **Intermediate Layer:** ~20 seconds
-- **Marts Layer:** ~15 seconds
-- **DBT Tests:** ~15 seconds
-- **Outputs:** ~10 seconds
+- **Total Pipeline Duration:** ~13 minutes (795 seconds)
+- **DBT Models:** ~103 seconds (10 models)
+- **DBT Snapshots:** ~70 seconds (2 snapshots)
+- **DBT Tests:** ~82 seconds (99 tests)
+- **CSV Export:** ~9 seconds
+- **Parquet Export:** ~10 seconds
+- **Databricks Load:** ~16 seconds
+- **Quality Report:** ~4 seconds
+- **Overhead:** ~502 seconds (network, cluster startup)
 
 **Incremental Load (10% change rate):**
-- **Total Pipeline Duration:** ~35-50 seconds
-- **Ingestion:** ~40 seconds
-- **Staging Layer:** ~10 seconds
-- **Snapshots (CDC):** ~5 seconds
-- **Intermediate Layer:** ~8 seconds (CDC)
-- **Marts Layer:** ~6 seconds (CDC)
-- **DBT Tests:** ~8 seconds
-- **Outputs:** ~10 seconds
-- **Speedup: 2-3x faster**
+- **Total Pipeline Duration:** ~6-8 minutes (estimated)
+- **DBT Models:** ~40 seconds (incremental)
+- **DBT Snapshots:** ~30 seconds (CDC)
+- **DBT Tests:** ~40 seconds
+- **Outputs:** ~35 seconds
+- **Speedup: 1.6-2x faster**
+
+**Latest Production Run (Dec 21, 2024):**
+- Environment: Databricks (workspace.default)
+- Records: 16 accounts
+- Total Time: 13m 15s
+- Tests: 99/99 passed (100%)
+- See `PRODUCTION_RUN_SUMMARY.md` for details
 
 ### Storage Growth
 

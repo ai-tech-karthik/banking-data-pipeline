@@ -27,7 +27,7 @@
 select
     *,
     '{{ validation_rules }}' as failure_reason,
-    current_timestamp() as quarantined_at
+    current_timestamp as quarantined_at
 from {{ source_table }}
 where {{ validation_rules }}
 

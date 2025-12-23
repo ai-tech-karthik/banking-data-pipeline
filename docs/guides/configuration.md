@@ -14,7 +14,7 @@ The Banking Data Pipeline uses environment-driven configuration to support multi
 | `DATABASE_TYPE` | Database backend | `duckdb`, `databricks` | `duckdb` |
 | `DBT_TARGET` | DBT profile target | `dev`, `prod` | `dev` |
 | `OUTPUT_PATH` | Directory for output files | Any valid path | `data/outputs` |
-| `DUCKDB_PATH` | Path to DuckDB file | Any valid path | `data/duckdb/lending_club.duckdb` |
+| `DUCKDB_PATH` | Path to DuckDB file | Any valid path | `data/duckdb/banking.duckdb` |
 
 ### Databricks Variables (Required when DATABASE_TYPE=databricks)
 
@@ -36,7 +36,7 @@ ENVIRONMENT=dev
 DATABASE_TYPE=duckdb
 DBT_TARGET=dev
 OUTPUT_PATH=data/outputs
-DUCKDB_PATH=data/duckdb/lending_club.duckdb
+DUCKDB_PATH=data/duckdb/banking.duckdb
 ```
 
 **Characteristics:**
@@ -245,7 +245,7 @@ ENVIRONMENT=dev
 DATABASE_TYPE=duckdb
 DBT_TARGET=dev
 OUTPUT_PATH=data/outputs
-DUCKDB_PATH=data/duckdb/lending_club.duckdb
+DUCKDB_PATH=data/duckdb/banking.duckdb
 ```
 
 ```bash

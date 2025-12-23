@@ -51,7 +51,7 @@ def test_env_setup(tmp_path):
     test_env_vars = {
         "DATABASE_TYPE": "duckdb",
         "DBT_TARGET": "dev",
-        "DUCKDB_PATH": str(duckdb_dir / "test_lending_club.duckdb"),
+        "DUCKDB_PATH": str(duckdb_dir / "test_banking.duckdb"),
         "OUTPUT_PATH": str(outputs_dir),
     }
     
@@ -65,7 +65,7 @@ def test_env_setup(tmp_path):
         "outputs_dir": outputs_dir,
         "duckdb_dir": duckdb_dir,
         "quality_reports_dir": quality_reports_dir,
-        "db_path": str(duckdb_dir / "test_lending_club.duckdb"),
+        "db_path": str(duckdb_dir / "test_banking.duckdb"),
         "customers_df": customers_df,
         "accounts_df": accounts_df,
     }

@@ -108,6 +108,6 @@ select
     round(original_balance + annual_interest, 2) as new_balance_amount,
     
     -- Add calculated timestamp
-    current_timestamp() as calculated_at
+    current_timestamp as calculated_at
     
 from final_calculation

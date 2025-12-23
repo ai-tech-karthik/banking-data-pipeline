@@ -12,6 +12,7 @@ from banking_pipeline.assets.ingestion import (
     customers_raw,
     accounts_raw,
     validate_csv_data,
+    SchemaChangeError,
 )
 
 
@@ -136,7 +137,7 @@ class TestCustomersRaw:
         try:
             os.chdir(tmp_path)
             context = build_asset_context()
-            with pytest.raises(ValueError, match="Missing required columns"):
+            with pytest.raises(SchemaChangeError, match="Missing columns"):
                 customers_raw(context)
         finally:
             os.chdir(original_cwd)
@@ -233,7 +234,7 @@ class TestAccountsRaw:
         try:
             os.chdir(tmp_path)
             context = build_asset_context()
-            with pytest.raises(ValueError, match="Missing required columns"):
+            with pytest.raises(SchemaChangeError, match="Missing columns"):
                 accounts_raw(context)
         finally:
             os.chdir(original_cwd)

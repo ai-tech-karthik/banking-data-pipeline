@@ -17,9 +17,10 @@ COPY pyproject.toml ./
 COPY src/ ./src/
 COPY dbt_project/ ./dbt_project/
 
-# Install Python dependencies
+# Install Python dependencies (including dev dependencies for testing)
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -e .
+    pip install --no-cache-dir -e . && \
+    pip install --no-cache-dir -e ".[dev]"
 
 # Create directories for data and ensure proper permissions
 RUN mkdir -p /app/data/inputs /app/data/outputs /app/data/duckdb && \

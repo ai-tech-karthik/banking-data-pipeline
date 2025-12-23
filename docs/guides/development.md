@@ -320,7 +320,7 @@ docker-compose exec dagster-user-code dbt run --select my_model --project-dir db
 # Access DuckDB CLI
 docker-compose exec dagster-user-code python -c "
 import duckdb
-conn = duckdb.connect('data/duckdb/lending_club.duckdb')
+conn = duckdb.connect('data/duckdb/banking.duckdb')
 result = conn.execute('SELECT * FROM stg_customers__cleaned LIMIT 5').fetchdf()
 print(result)
 "

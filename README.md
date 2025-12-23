@@ -298,14 +298,22 @@ cp .env.example .env
 
 ### Run Locally (DuckDB)
 
+**Configure for Development Mode:**
+
+Ensure your `.env` file has these settings:
 ```bash
-# Configure for DuckDB
-export DATABASE_TYPE=duckdb
-export DBT_TARGET=dev
+ENVIRONMENT=dev
+DATABASE_TYPE=duckdb
+DBT_TARGET=dev
+```
+
+Then run the pipeline:
+```bash
+# Set Dagster home
 export DAGSTER_HOME=$(pwd)/dagster_home
 
 # Install DBT dependencies 
- source venv/bin/activate && cd dbt_project && dbt deps --profiles-dir .
+source venv/bin/activate && cd dbt_project && dbt deps --profiles-dir .
 
 # To generate DBT manifest
 source venv/bin/activate && cd dbt_project && dbt compile --profiles-dir .
@@ -316,10 +324,18 @@ source venv/bin/activate && dagster asset materialize --select '*' -m src.bankin
 
 ### Run Production (Databricks)
 
+**Switch to Production Mode:**
+
+Edit your `.env` file and change these 3 variables:
 ```bash
-# Configure for Databricks
-export DATABASE_TYPE=databricks
-export DBT_TARGET=prod
+ENVIRONMENT=prod
+DATABASE_TYPE=databricks
+DBT_TARGET=prod
+```
+
+Then run the pipeline:
+```bash
+# Set Dagster home
 export DAGSTER_HOME=$(pwd)/dagster_home
 
 # Run pipeline
@@ -513,24 +529,29 @@ python tests/smoke_test.py
 
 ### Test Coverage
 
-**DBT Tests (40+ tests):**
-- Source Layer: 6 tests (schema validation, row counts, not_null)
-- Staging Layer: 12 tests (unique, not_null, accepted_values, positive_value)
-- Snapshot Layer: 8 tests (SCD2 integrity, freshness, current/historical records)
-- Intermediate Layer: 6 tests (referential integrity, relationships)
-- Marts Layer: 8 tests (calculation accuracy, completeness, freshness)
+**DBT Tests (99 tests):**
+- Source Layer: 4 tests (schema validation, row counts, not_null)
+- Staging Layer: 16 tests (unique, not_null, accepted_values, positive_value)
+- Snapshot Layer: 26 tests (SCD2 integrity, freshness, current/historical records)
+- Intermediate Layer: 26 tests (referential integrity, relationships)
+- Marts Layer: 27 tests (calculation accuracy, completeness, freshness)
 
 **Python Tests:**
 - Unit Tests: Snapshots, incremental models, ingestion logic
 - Integration Tests: SCD2 behavior, CDC processing, contract enforcement, naming conventions, data quality
 - E2E Tests: Full pipeline execution with incremental loads
 
-### Test Results
+### Latest Test Results (Production)
 
-- **DuckDB:** All tests passed (100% pass rate)
-- **Databricks:** All tests passed (100% pass rate)
-- **DBT:** 40+ tests passed across all layers
-- **Python:** All unit, integration, and e2e tests passed
+**Date:** December 21, 2024  
+**Environment:** Databricks (workspace.default)
+
+- **Total Tests:** 111 (99 DBT + 12 asset validations)
+- **Pass Rate:** 100% ✅
+- **Execution Time:** ~13 minutes
+- **Records Processed:** 16 accounts
+
+See `PRODUCTION_RUN_SUMMARY.md` and `TEST_RESULTS_SUMMARY.md` for complete details.
 
 ### Run Specific Test Suites
 
@@ -555,8 +576,11 @@ pytest tests/integration/test_naming.py -v
 
 Comprehensive documentation is available in the repository:
 
+- **[Production Run Summary](PRODUCTION_RUN_SUMMARY.md)** - Latest production execution results (Dec 21, 2024)
+- **[Environment Switching Guide](ENVIRONMENT_SWITCHING.md)** - Quick reference for switching between dev and prod
 - **[Quick Start Guide](QUICK_START.md)** - Get started quickly
 - **[Pipeline Execution Guide](PIPELINE_EXECUTION_GUIDE.md)** - Detailed execution instructions
+- **[Test Results Summary](TEST_RESULTS_SUMMARY.md)** - Complete test results and validation
 - **[Migration Guide](docs/MIGRATION_GUIDE.md)** - Migrate from 3-layer to 5-layer architecture
 - **[Data Quality Guide](docs/DATA_QUALITY_GUIDE.md)** - Comprehensive data quality testing guide
 

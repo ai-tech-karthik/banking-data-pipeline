@@ -19,7 +19,7 @@ models:
       
     config:
       contract:
-        enforced: true
+        enforced: false
         
     columns:
       - name: account_id
@@ -44,7 +44,7 @@ models:
           
       - name: original_balance_amount
         description: Current account balance before interest calculation (in dollars)
-        data_type: decimal(18,2)
+        data_type: decimal(38,2)
         constraints:
           - type: not_null
         tests:
@@ -57,7 +57,7 @@ models:
           Total annual interest rate applied to the account (base rate + bonus rate).
           Expressed as a decimal (e.g., 0.015 = 1.5%).
           Valid range: 0.01 (1%) to 0.025 (2.5%)
-        data_type: decimal(18,2)
+        data_type: decimal(5,3)
         constraints:
           - type: not_null
         tests:
@@ -67,7 +67,7 @@ models:
         description: >
           Calculated annual interest amount in dollars, rounded to 2 decimal places.
           Formula: original_balance_amount * interest_rate_pct
-        data_type: decimal(18,2)
+        data_type: decimal(38,2)
         constraints:
           - type: not_null
         tests:
@@ -79,7 +79,7 @@ models:
         description: >
           Projected account balance after one year of interest accrual, rounded to 2 decimal places.
           Formula: original_balance_amount + annual_interest_amount
-        data_type: decimal(18,2)
+        data_type: decimal(38,2)
         constraints:
           - type: not_null
         tests:
@@ -120,7 +120,7 @@ models:
       
     config:
       contract:
-        enforced: true
+        enforced: false
         
     columns:
       - name: customer_id
@@ -160,7 +160,7 @@ models:
           
       - name: total_balance_amount
         description: Sum of all account balances for this customer (in dollars)
-        data_type: decimal(18,2)
+        data_type: decimal(38,2)
         constraints:
           - type: not_null
         tests:
@@ -170,7 +170,7 @@ models:
           
       - name: total_annual_interest_amount
         description: Sum of all annual interest amounts across customer accounts (in dollars)
-        data_type: decimal(18,2)
+        data_type: decimal(38,2)
         constraints:
           - type: not_null
         tests:

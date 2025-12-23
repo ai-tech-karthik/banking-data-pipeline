@@ -47,7 +47,7 @@ ENVIRONMENT=dev
 
 # Database Configuration
 DATABASE_TYPE=duckdb
-DUCKDB_PATH=data/duckdb/lending_club.duckdb
+DUCKDB_PATH=data/duckdb/banking.duckdb
 
 # DBT Configuration
 DBT_TARGET=dev

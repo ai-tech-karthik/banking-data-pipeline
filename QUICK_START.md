@@ -23,13 +23,20 @@ mkdir -p data/duckdb data/outputs data/inputs dagster_home
 ## Run Pipeline - DuckDB (Local)
 
 ### 1. Configure Environment
+
+**Edit your `.env` file with these settings:**
 ```bash
-# Edit .env file
+ENVIRONMENT=dev
 DATABASE_TYPE=duckdb
 DBT_TARGET=dev
-DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/lending_club.duckdb
+DUCKDB_PATH=/absolute/path/to/banking-data-pipeline/data/duckdb/banking.duckdb
 DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 ```
+
+**Key Variables for Dev Mode:**
+- `ENVIRONMENT=dev`
+- `DATABASE_TYPE=duckdb`
+- `DBT_TARGET=dev`
 
 ### 2. Run Pipeline
 ```bash
@@ -53,17 +60,28 @@ python tests/smoke_test.py
 ## Run Pipeline - Databricks (Production)
 
 ### 1. Configure Environment
+
+**Edit your `.env` file and change these 3 key variables:**
 ```bash
-# Edit .env file
+ENVIRONMENT=prod
 DATABASE_TYPE=databricks
 DBT_TARGET=prod
+```
+
+**Plus ensure Databricks credentials are set:**
+```bash
 DATABRICKS_HOST=your-workspace.cloud.databricks.com
-DATABRICKS_TOKEN=your-token
+DATABRICKS_TOKEN=your-databricks-token-here
 DATABRICKS_CATALOG=workspace
 DATABRICKS_SCHEMA=default
 DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/your-warehouse-id
 DAGSTER_HOME=/absolute/path/to/banking-data-pipeline/dagster_home
 ```
+
+**Key Variables for Prod Mode:**
+- `ENVIRONMENT=prod`
+- `DATABASE_TYPE=databricks`
+- `DBT_TARGET=prod`
 
 ### 2. Test Connection
 ```bash
@@ -85,7 +103,37 @@ ls -lh data/outputs/
 python tests/smoke_test.py
 ```
 
-**Expected Duration:** ~80 seconds
+**Expected Duration:** ~80 seconds (Databricks)
+
+**Expected Outputs:**
+- `account_summary.csv` - 1.23 KB (16 rows)
+- `account_summary.parquet` - 5.47 KB (16 rows)
+- Databricks table: `workspace.default.account_summary` (16 rows)
+- Quality report: `data/quality_reports/quality_report_*.json`
+
+---
+
+## Production Run Results (Latest)
+
+**Date:** December 21, 2024  
+**Environment:** Databricks (workspace.default)
+
+### Execution Summary
+- ✅ **Total Time:** 13 minutes 15 seconds
+- ✅ **DBT Models:** 10/10 built successfully
+- ✅ **DBT Snapshots:** 2/2 created successfully
+- ✅ **DBT Tests:** 99/99 passed (100% pass rate)
+- ✅ **Records Processed:** 16 accounts
+- ✅ **Output Formats:** CSV (1.23 KB), Parquet (5.47 KB), Delta Lake
+
+### Performance Breakdown
+- DBT Transformations: 7m 9s
+- CSV Export: 9.3s
+- Parquet Export: 10.4s
+- Databricks Load: 16.0s
+- Quality Report: 3.5s
+
+See `PRODUCTION_RUN_SUMMARY.md` for complete details.
 
 ---
 
@@ -121,7 +169,7 @@ dbt build --target prod --project-dir dbt_project --profiles-dir dbt_project
 
 ### Check DuckDB Tables
 ```bash
-python -c "import duckdb; conn = duckdb.connect('data/duckdb/lending_club.duckdb'); print(conn.execute('SHOW ALL TABLES').df())"
+python -c "import duckdb; conn = duckdb.connect('data/duckdb/banking.duckdb'); print(conn.execute('SHOW ALL TABLES').df())"
 ```
 
 ### View Output Data

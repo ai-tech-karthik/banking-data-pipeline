@@ -54,7 +54,7 @@ def test_env_with_large_dataset(tmp_path):
     test_env_vars = {
         "DATABASE_TYPE": "duckdb",
         "DBT_TARGET": "dev",
-        "DUCKDB_PATH": str(duckdb_dir / "test_lending_club.duckdb"),
+        "DUCKDB_PATH": str(duckdb_dir / "test_banking.duckdb"),
         "OUTPUT_PATH": str(outputs_dir),
     }
     
@@ -69,7 +69,7 @@ def test_env_with_large_dataset(tmp_path):
         "inputs_dir": inputs_dir,
         "outputs_dir": outputs_dir,
         "duckdb_dir": duckdb_dir,
-        "db_path": str(duckdb_dir / "test_lending_club.duckdb"),
+        "db_path": str(duckdb_dir / "test_banking.duckdb"),
         "dbt_project_dir": dbt_project_dir,
         "num_customers": num_customers,
         "num_accounts": num_accounts,

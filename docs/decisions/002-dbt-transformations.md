@@ -143,7 +143,7 @@ dev:
   outputs:
     duckdb:
       type: duckdb
-      path: data/duckdb/lending_club.duckdb
+      path: data/duckdb/banking.duckdb
 
 prod:
   target: databricks

@@ -8,7 +8,7 @@ banking_pipeline:
     # Development profile using DuckDB (local)
     dev:
       type: duckdb
-      path: "{{ env_var('DUCKDB_PATH', '/Users/priyakarthik/MyProjects/MyNextJobInterview/Banking/Assignment/banking-data-pipeline/data/duckdb/lending_club.duckdb') }}"
+      path: "{{ env_var('DUCKDB_PATH', '/Users/priyakarthik/MyProjects/tech-articles/banking-data-pipeline/data/duckdb/banking.duckdb') }}"
       threads: 4
       
     # Production profile using Databricks

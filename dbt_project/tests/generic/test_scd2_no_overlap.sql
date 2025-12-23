@@ -13,7 +13,7 @@ with snapshot_records as (
     from {{ model }}
 ),
 
-overlaps as (
+overlapping_records as (
     select
         a.{{ unique_key }},
         a.dbt_scd_id as record_a_id,
@@ -33,6 +33,6 @@ overlaps as (
         and b.dbt_valid_from < coalesce(a.dbt_valid_to, cast('2099-12-31' as timestamp))
 )
 
-select * from overlaps
+select * from overlapping_records
 
 {% endtest %}

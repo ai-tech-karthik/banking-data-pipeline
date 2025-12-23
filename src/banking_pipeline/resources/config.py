@@ -53,7 +53,7 @@ class DataPlatformConfig:
         database_type = os.getenv("DATABASE_TYPE", "duckdb")
         dbt_target = os.getenv("DBT_TARGET", "dev")
         output_path = os.getenv("OUTPUT_PATH", "data/outputs")
-        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/lending_club.duckdb")
+        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/banking.duckdb")
         
         # Validate environment
         if environment not in ["dev", "staging", "prod"]:

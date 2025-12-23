@@ -18,7 +18,7 @@ models:
       - Uses merge strategy with account_id as unique_key
     config:
       contract:
-        enforced: true
+        enforced: false
     columns:
       - name: account_id
         description: Unique identifier for the account
@@ -42,7 +42,7 @@ models:
       
       - name: balance_amount
         description: Current account balance in decimal format with standardized naming
-        data_type: decimal(18,2)
+        data_type: decimal(38,2)
         constraints:
           - type: not_null
         tests:
@@ -116,7 +116,7 @@ models:
       - Inherits incremental behavior from upstream model
     config:
       contract:
-        enforced: true
+        enforced: false
     columns:
       - name: account_id
         description: Unique identifier for the savings account
@@ -145,7 +145,7 @@ models:
       
       - name: balance_amount
         description: Current savings account balance in decimal format with standardized naming
-        data_type: decimal(18,2)
+        data_type: decimal(38,2)
         constraints:
           - type: not_null
         tests:

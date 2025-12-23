@@ -97,7 +97,7 @@ def account_summary_csv(
         # Read from DuckDB
         import duckdb
         
-        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/lending_club.duckdb")
+        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/banking.duckdb")
         context.log.info(f"Reading account_summary from DuckDB: {duckdb_path}")
         
         conn = duckdb.connect(database=duckdb_path, read_only=True)
@@ -245,7 +245,7 @@ def account_summary_parquet(
         # Read from DuckDB
         import duckdb
         
-        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/lending_club.duckdb")
+        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/banking.duckdb")
         context.log.info(f"Reading account_summary from DuckDB: {duckdb_path}")
         
         conn = duckdb.connect(database=duckdb_path, read_only=True)
@@ -656,7 +656,7 @@ def customer_profile_csv(
         # Read from DuckDB
         import duckdb
         
-        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/lending_club.duckdb")
+        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/banking.duckdb")
         context.log.info(f"Reading customer_profile from DuckDB: {duckdb_path}")
         
         conn = duckdb.connect(database=duckdb_path, read_only=True)
@@ -804,7 +804,7 @@ def customer_profile_parquet(
         # Read from DuckDB
         import duckdb
         
-        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/lending_club.duckdb")
+        duckdb_path = os.getenv("DUCKDB_PATH", "data/duckdb/banking.duckdb")
         context.log.info(f"Reading customer_profile from DuckDB: {duckdb_path}")
         
         conn = duckdb.connect(database=duckdb_path, read_only=True)

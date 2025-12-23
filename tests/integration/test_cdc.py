@@ -500,7 +500,7 @@ class TestCDCLookbackWindow:
                     CAST(NULL AS TIMESTAMP) as dbt_valid_to,
                     'A001' as account_id,
                     1 as customer_id,
-                    5000.00 as balance_amount,
+                    CAST(5000.00 AS DECIMAL(18,2)) as balance_amount,
                     'Savings' as account_type,
                     TIMESTAMP '2024-01-01 10:00:00' as loaded_at
             """)
@@ -536,7 +536,7 @@ class TestCDCLookbackWindow:
                     CAST(NULL AS TIMESTAMP) as dbt_valid_to,
                     'A002' as account_id,
                     2 as customer_id,
-                    10000.00 as balance_amount,
+                    CAST(10000.00 AS DECIMAL(18,2)) as balance_amount,
                     'Savings' as account_type,
                     TIMESTAMP '2024-01-02 10:00:00' as loaded_at
             """)

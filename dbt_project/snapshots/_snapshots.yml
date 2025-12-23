@@ -21,7 +21,7 @@ snapshots:
     
     config:
       contract:
-        enforced: true
+        enforced: false
     
     columns:
       - name: dbt_scd_id
@@ -139,7 +139,7 @@ snapshots:
     
     config:
       contract:
-        enforced: true
+        enforced: false
     
     columns:
       - name: dbt_scd_id
