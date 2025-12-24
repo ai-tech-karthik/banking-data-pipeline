@@ -66,6 +66,7 @@ dagster_home/
 *.log
 *.bak
 *.swp
+logs/
 
 # OS files
 Thumbs.db
