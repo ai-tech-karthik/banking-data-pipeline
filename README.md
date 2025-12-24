@@ -581,7 +581,6 @@ Comprehensive documentation is available in the repository:
 - **[Quick Start Guide](QUICK_START.md)** - Get started quickly
 - **[Pipeline Execution Guide](PIPELINE_EXECUTION_GUIDE.md)** - Detailed execution instructions
 - **[Test Results Summary](TEST_RESULTS_SUMMARY.md)** - Complete test results and validation
-- **[Migration Guide](docs/MIGRATION_GUIDE.md)** - Migrate from 3-layer to 5-layer architecture
 - **[Data Quality Guide](docs/DATA_QUALITY_GUIDE.md)** - Comprehensive data quality testing guide
 
 ### Additional Resources
