@@ -1,11 +1,15 @@
 # Banking Data Pipeline
 
-A production-grade data pipeline for processing customer and account data with interest calculations, built with Dagster and DBT.
-
+[![GitHub stars](https://img.shields.io/github/stars/ai-tech-karthik/banking-data-pipeline?style=social)](https://github.com/ai-tech-karthik/banking-data-pipeline/stargazers)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![Dagster](https://img.shields.io/badge/dagster-1.5%2B-orange)](https://dagster.io/)
 [![DBT](https://img.shields.io/badge/dbt-1.6%2B-orange)](https://www.getdbt.com/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![AI](https://img.shields.io/badge/Built%20with-Claude%20AI-blueviolet)](https://www.anthropic.com/claude)
+
+A production-grade data pipeline for processing customer and account data with interest calculations, built with Dagster and DBT.
+
+> **⭐ If you find this project helpful, please consider giving it a star!**
 
 > **Note:** This project was developed using AI-assisted development with **Claude (Anthropic)**.
 
