@@ -128,7 +128,7 @@ CSV Files → Source → Staging → Snapshots → Intermediate → Marts → Ou
 
 ### Dagster UI - Asset Lineage
 
-![Dagster UI Assets](lc-dagster-ui-asserts.png)
+![Dagster UI Assets](docs/images/lc-dagster-ui-asserts.png)
 
 ### SCD2 Historical Tracking
 
@@ -346,7 +346,7 @@ dagster asset materialize --select '*' -m src.banking_pipeline.definitions
 
 The pipeline is fully containerized with Docker Compose for easy deployment:
 
-![Docker Containers Architecture](docker-containers.png)
+![Docker Containers Architecture](docs/images/docker-containers.png)
 
 ```bash
 # To build fresh docker images (no cache to ensure all changes are include
@@ -551,7 +551,7 @@ python tests/smoke_test.py
 - **Execution Time:** ~13 minutes
 - **Records Processed:** 16 accounts
 
-See `PRODUCTION_RUN_SUMMARY.md` and `TEST_RESULTS_SUMMARY.md` for complete details.
+See `docs/PRODUCTION_RUN_SUMMARY.md` and `docs/TEST_RESULTS_SUMMARY.md` for complete details.
 
 ### Run Specific Test Suites
 
@@ -576,11 +576,11 @@ pytest tests/integration/test_naming.py -v
 
 Comprehensive documentation is available in the repository:
 
-- **[Production Run Summary](PRODUCTION_RUN_SUMMARY.md)** - Latest production execution results (Dec 21, 2024)
-- **[Environment Switching Guide](ENVIRONMENT_SWITCHING.md)** - Quick reference for switching between dev and prod
-- **[Quick Start Guide](QUICK_START.md)** - Get started quickly
-- **[Pipeline Execution Guide](PIPELINE_EXECUTION_GUIDE.md)** - Detailed execution instructions
-- **[Test Results Summary](TEST_RESULTS_SUMMARY.md)** - Complete test results and validation
+- **[Production Run Summary](docs/PRODUCTION_RUN_SUMMARY.md)** - Latest production execution results (Dec 21, 2024)
+- **[Environment Switching Guide](docs/ENVIRONMENT_SWITCHING.md)** - Quick reference for switching between dev and prod
+- **[Quick Start Guide](docs/QUICK_START.md)** - Get started quickly
+- **[Pipeline Execution Guide](docs/PIPELINE_EXECUTION_GUIDE.md)** - Detailed execution instructions
+- **[Test Results Summary](docs/TEST_RESULTS_SUMMARY.md)** - Complete test results and validation
 - **[Data Quality Guide](docs/DATA_QUALITY_GUIDE.md)** - Comprehensive data quality testing guide
 
 ### Additional Resources
