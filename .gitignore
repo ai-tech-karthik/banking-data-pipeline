@@ -68,6 +68,9 @@ dagster_home/
 *.swp
 logs/
 
+# Article drafts (private)
+articles-publish-sample/
+
 # OS files
 Thumbs.db
 .Spotlight-V100
